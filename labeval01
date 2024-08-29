@@ -1,0 +1,70 @@
+SHRADHA MITTAL 22103162 B6 LAB EVAL-EVEN SYSTEM
+from datetime import date
+
+class AttendanceTracker:
+    def __init__(self):
+        self.attendance_record = {}
+
+    def mark_present(self, student_name: str, attendance_date: date = None):
+        """Mark a student as present on a given date (default is today)."""
+        if attendance_date is None:
+            attendance_date = date.today()
+        
+        if student_name not in self.attendance_record:
+            self.attendance_record[student_name] = {}
+
+        self.attendance_record[student_name][attendance_date] = True
+        print(f"{student_name} has been marked as present on {attendance_date}.")
+
+    def remove_student(self, student_name: str, attendance_date: date = None):
+        """Remove a student's presence record on a given date (default is today)."""
+        if attendance_date is None:
+            attendance_date = date.today()
+        
+        if student_name in self.attendance_record and attendance_date in self.attendance_record[student_name]:
+            del self.attendance_record[student_name][attendance_date]
+            print(f"{student_name} has been removed from the attendance list on {attendance_date}.")
+        else:
+            print(f"{student_name} is not marked as present on {attendance_date}.")
+
+    def is_present(self, student_name: str, attendance_date: date = None) -> bool:
+        """Check if a student is marked as present on a given date."""
+        if attendance_date is None:
+            attendance_date = date.today()
+
+        return self.attendance_record.get(student_name, {}).get(attendance_date, False)
+
+    def display_attendance(self, attendance_date: date = None):
+        """Display the list of students who are present on a given date (default is today)."""
+        if attendance_date is None:
+            attendance_date = date.today()
+        
+        present_students = [student for student, dates in self.attendance_record.items() if dates.get(attendance_date)]
+
+        if present_students:
+            print(f"Students present on {attendance_date}:")
+            for student in present_students:
+                print(f"- {student}")
+        else:
+            print(f"No students are present on {attendance_date}.")
+
+# Example usage
+tracker = AttendanceTracker()
+
+# Mark some students as present on different dates
+tracker.mark_present("Alice", date(2024, 8, 28))
+tracker.mark_present("Bob", date(2024, 8, 28))
+tracker.mark_present("Charlie", date(2024, 8, 29))
+
+# Check if a student is present on a specific date
+print(tracker.is_present("Alice", date(2024, 8, 28))) 
+print(tracker.is_present("Alice", date(2024, 8, 29))) 
+# Display attendance for a specific date
+tracker.display_attendance(date(2024, 8, 28))
+tracker.display_attendance(date(2024, 8, 29))
+
+# Remove a student from a specific date
+tracker.remove_student("Bob", date(2024, 8, 28))
+
+# Display updated attendance for a specific date
+tracker.display_attendance(date(2024, 8, 28))
